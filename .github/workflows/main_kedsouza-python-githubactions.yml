@@ -24,11 +24,14 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
-      
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+          python -m venv antenv
+          source antenv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Tar Artifacts to increase upload time
+        run: |
+         touch app.tar.gz
+         tar -czf app.tar.gz --exclude=app.tar.gz .
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
@@ -36,9 +39,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: python-app
-          path: |
-            . 
-            !venv/
+          path: app.tar.gz
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,6 +54,11 @@ jobs:
         with:
           name: python-app
           path: .
+
+      - name: Extract Tar
+        run: |
+          tar -xf app.tar.gz
+          rm app.tar.gz
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
