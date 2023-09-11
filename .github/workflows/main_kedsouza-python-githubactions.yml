@@ -64,11 +64,13 @@ jobs:
         uses: Azure/appservice-settings@v1
         with:
           app-name: 'kedsouza-python'
-          app-settings-json: |
-              '[
-                { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "false", "slotSetting": false },
-                { "name": "PYTHONPATH", "value": "/home/site/wwwroot/venv/lib/python3.9/site-packages", "slotSetting": false }
-              ]'
+          app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "false", "slotSetting": false }]'
+
+          # app-settings-json: |
+          #     '[
+          #       { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "false", "slotSetting": false },
+          #       { "name": "PYTHONPATH", "value": "/home/site/wwwroot/venv/lib/python3.9/site-packages", "slotSetting": false }
+          #     ]'
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
